@@ -65,80 +65,16 @@ Program was written in C#, therefore, a special environment for the aforemention
     INSERT INTO AccountRoles(Rolename, Roleallow) VALUES ('Admin', '45EADA4A-CFB8-46A9-8DDB-5A1ACCC89D2A');
     INSERT INTO AccountRoles(Rolename, Roledeny) VALUES ('RegularUser', '45EADA4A-CFB8-46A9-8DDB-5A1ACCC89D2A');
     ```
-
-4.  Create a new database, named as RADAR, in your local SQL Server
-5. Execute the following queries to create necessary tables
-````java
-     CREATE TABLE Antenna (
-        antenna_id uniqueidentifier PRIMARY KEY NOT NULL,
-        type nvarchar(50) NOT NULL CHECK (type IN('parabolic', 'cassegrain', 'phased array')),
-        task nvarchar(50) NOT NULL CHECK (task IN('transmitter', 'receiver','multiuse')),
-        horizontal_beamwidth INT,
-        vertical_beamwidth INT,
-        polarization nvarchar(500) NOT NULL,
-        antenna_gain NUMERIC(2,2),
-        number_of_feed INT,
-        horizontal_dimension NUMERIC(4,2),
-        vertical_dimension NUMERIC(4,2)
-    );
-
-    CREATE TABLE Receiver(
-        receiver_id uniqueidentifier PRIMARY KEY NOT NULL,
-        listening_time INT NOT NULL,
-        rest_time INT NOT NULL,
-        recovery_time INT NOT NULL,
-        Antenna_id uniqueidentifier FOREIGN KEY REFERENCES Antenna(antenna_id) ON DELETE CASCADE ON UPDATE CASCADE
-    );
-
-
-    CREATE TABLE Transmitter(
-        transmitter_id uniqueidentifier PRIMARY KEY NOT NULL,
-        PW numeric(2,2) NOT NULL,
-        PRI numeric(2,2) NOT NULL,
-        PRF numeric(2,2) NOT NULL,
-        power INT NOT NULL,
-        Antenna_id uniqueidentifier FOREIGN KEY REFERENCES Antenna(antenna_id) ON DELETE CASCADE ON UPDATE CASCADE
-    );
-
-    CREATE TABLE Location(
-        location_id uniqueidentifier PRIMARY KEY NOT NULL,
-        country nvarchar(500) NOT NULL,
-        city nvarchar(500) NOT NULL,
-        geographic_latitude nvarchar(500) NOT NULL,
-        geographic_longitude nvarchar(500) NOT NULL
-    );
-
-    CREATE TABLE Scan(
-        scan_id uniqueidentifier PRIMARY KEY NOT NULL,
-        type nvarchar(500) NOT NULL
-    );
-
-    CREATE TABLE Radar(
-        radar_id uniqueidentifier PRIMARY KEY NOT NULL,
-        type nvarchar(500) NOT NULL CHECK (type IN('attack warning', 'threat engagement', 'multiple type')),
-        configuration nvarchar(500) NOT NULL CHECK (configuration IN('bistatic', 'continious wave', 'doppler', 'fm-cw', 'monopulse', 'passive', 'planar array', 'pulse doppler')),
-        receiver uniqueidentifier FOREIGN KEY REFERENCES Receiver(receiver_id) ON DELETE CASCADE ON UPDATE CASCADE,
-        transmitter uniqueidentifier FOREIGN KEY REFERENCES Transmitter(transmitter_id) ON DELETE CASCADE ON UPDATE CASCADE,
-        location uniqueidentifier FOREIGN KEY REFERENCES Location(location_id) ON DELETE CASCADE ON UPDATE CASCADE
-    );
-
-    CREATE TABLE RadarScans(
-        rs_id uniqueidentifier PRIMARY KEY NOT NULL,
-        radar_id uniqueidentifier FOREIGN KEY REFERENCES Radar(radar_id) ON DELETE CASCADE ON UPDATE CASCADE,
-        scan_id uniqueidentifier FOREIGN KEY REFERENCES Scan(scan_id) ON DELETE CASCADE ON UPDATE CASCADE
-    );
-    
-````
-6. Select "Add Connection" after right clicking on "Data Connections" in "Server Explorer" from the view panel of the Visual Studio 
-7. Fill the necessary boxes as shown below and select the database created in step 2
+4. Select "Add Connection" after right clicking on "Data Connections" in "Server Explorer" from the view panel of the Visual Studio 
+5. Fill the necessary boxes as shown below and select the database created in step 2
 
     Data Source: Microsoft SQL Server (SqlClient)
 
     Server Name: Your local SQL Server's name 
 
-8. Copy the connection string from the "properties" for the server added in the previous step in "Data Connections" & paste it to localDatabase in appsettings.json
-9. Install Postgres from Package Manager Console under the Tools menu of the Visual Studio (Required for aspects)
-10. Install [ASPNETAOP-WebServer](https://github.com/cenkgokturk/ASPNET-CORE-MVC-WEB-SERVER) and open it in a seperate Visual Studio window 
-11. Click "Start without debugging" for the ASPNETAOP-WebServer project
-12. Do the same thing for ASPNETAOP
-13. Both projects will be opened in your default browser. Unless you want to debug, you don't have to interact with the WebServer
+6. Copy the connection string from the "properties" for the server added in the previous step in "Data Connections" & paste it to localDatabase in appsettings.json
+7. Install Postgres from Package Manager Console under the Tools menu of the Visual Studio (Required for aspects)
+8. Install [ASPNETAOP-WebServer](https://github.com/cenkgokturk/ASPNET-CORE-MVC-WEB-SERVER) and open it in a seperate Visual Studio window 
+9. Click "Start without debugging" for the ASPNETAOP-WebServer project
+10. Do the same thing for ASPNETAOP
+11. Both projects will be opened in your default browser. Unless you want to debug, you don't have to interact with the WebServer
